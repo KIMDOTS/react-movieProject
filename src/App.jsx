@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import MovieCard from './components/MovieCard'
+import MovieDetail from './components/MovieDetail';
+import { Route, Routes } from 'react-router-dom';
+import Layout from './components/Layout';
 
 function App() {
   const [movies, setMovies] = useState([]);
@@ -20,13 +23,25 @@ function App() {
 
   return (
     <div>
-      <ul className='flex flex-wrap gap-5 p-0'>
-        {movies.map((movie) => (
-          <li className="w-[calc(20%-20px)] box-border" key={movie.id}>
-            <MovieCard movie={movie} />
-          </li>
-        ))}
-      </ul>
+      <header>
+        <div>
+          Movie Wiki
+        </div>
+      </header>
+      <Routes>
+        <Route path="/" element={<Layout movies={movies} />}>
+          <Route path="/" element={
+            <ul className='flex flex-wrap gap-5 px-[25px] py-[50px] justify-center'>
+              {movies.map((movie) => (
+                <li className="w-[calc(20%-20px)] box-border" key={movie.id}>
+                  <MovieCard movie={movie} />
+                </li>
+              ))}
+            </ul>
+          } />
+        </Route>
+        <Route path='/details' element={<MovieDetail />} />
+      </Routes>
     </div>
   )
 }
