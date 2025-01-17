@@ -23,11 +23,6 @@ function App() {
 
   return (
     <div>
-      <header>
-        <div>
-          Movie Wiki
-        </div>
-      </header>
       <Routes>
         <Route path="/" element={<Layout movies={movies} />}>
           <Route path="/" element={
