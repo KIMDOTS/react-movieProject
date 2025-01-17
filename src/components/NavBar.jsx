@@ -1,39 +1,36 @@
-import React from 'react';
-
-const imageUrl = "https://image.tmdb.org/t/p/w500";
+import React, { useState } from 'react';
 
 const NavBar = ({ movies }) => {
+  const [query, setQuery] = useState(''); // 검색어 상태
 
-  // 내림차순 코드
-  const sortedMovies = [...movies].sort((a, b) => b.vote_average - a.vote_average);
-
-  // 상위 5개 영화만 선택
-  const topMovies = sortedMovies.slice(0, 7);
+  const handleSearch = (event) => {
+    event.preventDefault(); // 폼 제출 시 페이지 새로고침 방지
+    const value = event.target.value;
+    setQuery(value); // 검색어 상태 업데이트
+  };
 
   return (
-    <header>
+    <nav className='flex justify-between items-center my-[10px]'>
+      <span className='text-xl font-bold px-[10px]'>Movie Wiki</span>
+      <form onSubmit={handleSearch}>
+        <input
+          className='w-[300px]'
+          type="text"
+          placeholder="Search..."
+          value={query}
+          onChange={handleSearch} // 입력값을 변경하는 이벤트 핸들러
+        />
+        <button type="submit">Search</button>
+      </form>
       <div>
-        Movie Wiki
+        <button className='bg-gray-800 mx-[3px] text-white rounded-[4px]'>
+          Log-in
+        </button>
+        <button className='bg-gray-800 mx-[3px] text-white rounded-[4px]'>
+          Sign-up
+        </button>
       </div>
-
-      <nav className="bg-gray-800 text-white py-8 shadow-lg">
-        <div>
-          <h1 className="text-3xl font-bold mb-6 text-center">영화 평점순</h1>
-          <ul className='flex flex-wrap justify-center gap-5'>
-            {topMovies.map((movie) => (
-              <li key={movie.id} className="text-center w-36">
-                <img
-                  className='w-full h-[300px] rounded-lg object-cover mb-3'
-                  src={`${imageUrl}${movie.poster_path}`}
-                  alt={movie.title}
-                />
-                <p className="text-sm font-medium">{movie.title}</p>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </nav>
-    </header>
+    </nav>
   );
 };
 

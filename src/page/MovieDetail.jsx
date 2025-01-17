@@ -4,6 +4,7 @@ const imageUrl = "https://image.tmdb.org/t/p/w500";
 
 const MovieDetail = () => {
   const [detailData, setDetailData] = useState({});
+
   useEffect(() => {
     fetch('/src/assets/data/movieDetailData.json')
       .then(response => response.json())
