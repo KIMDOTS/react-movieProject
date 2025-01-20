@@ -7,7 +7,7 @@ const Slide = ({ movies }) => {
   // 내림차순 코드
   const sortedMovies = [...movies].sort((a, b) => b.vote_average - a.vote_average);
 
-  // 상위 5개 영화만 선택
+  // 상위 7개 영화만 선택
   const topMovies = sortedMovies.slice(0, 7);
 
   return (

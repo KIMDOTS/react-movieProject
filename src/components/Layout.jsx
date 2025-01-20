@@ -7,7 +7,7 @@ const Layout = ({ movies }) => {
     <div>
       <NavBar movies={movies} />
 
-      {/* Outlet을 사용하여 각 페이지 라우트를 렌더링 */}
+      {/* Outlet을 사용하여 자식요소 페이지 라우트를 렌더링 */}
       <Outlet />
     </div>
   );

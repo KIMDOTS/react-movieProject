@@ -1,38 +1,68 @@
-import { useEffect, useState } from 'react'
-import './App.css'
-import MovieCard from './components/MovieCard'
+import { useEffect, useState } from 'react';
+import './App.css';
 import MovieDetail from './page/MovieDetail';
 import { Route, Routes } from 'react-router-dom';
 import Layout from './components/Layout';
-import Slide from './components/Slide';
 import Main from './page/Main';
+import axios from 'axios';
 
 function App() {
   const [movies, setMovies] = useState([]);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
 
+  // 페이지가 바뀔 때마다 API 요청을 보내는 useEffect
   useEffect(() => {
-    // fetch()는 JSON 파일을 가져오는 역할
-    fetch('/src/assets/data/movieListData.json')
-      // response.json()을 사용해서 JSON 형식으로 변환
-      .then(response => response.json())
-      //변환된 데이터(data.results)를 setMovies()를 이용해 movies 상태에 저장
-      .then(data => {
-        console.log(data);
-        setMovies(data.results)
-      })
-      .catch(error => console.error('Error:', error));
-  }, []);
+    fetchMovies(page);
+  }, [page]); // page 바뀔 때마다 호출
+
+  // 영화 데이터를 가져오는 함수
+  const fetchMovies = async (pageNumber) => {
+    setLoading(true); // 로딩 시작
+
+    const accessToken = import.meta.env.VITE_MOVIE_ACCESS_TOKEN;
+    const url = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=ko-KR&page=${pageNumber}&sort_by=popularity.desc`;
+
+    try {
+      const response = await axios.get(url, {
+        headers: {
+          accept: 'application/json',
+          Authorization: `Bearer ${accessToken}`, // Authorization 헤더에 액세스 토큰 추가
+        }
+      });
+
+      // 성인영화 필터링
+      const filteredMovies = response.data.results.filter(movie => !movie.adult);
+
+      // 기존 영화 목록에 추가
+      setMovies(prevMovies => [...prevMovies, ...filteredMovies]);
+
+    } catch (error) {
+      console.error('API 요청 실패:', error);  // 오류 처리
+    } finally {
+      setLoading(false);  // 로딩 종료
+    }
+  };
+
+  // "더보기" 버튼 클릭 시 실행될 함수
+  const loadMoreMovies = () => {
+    const nextPage = page + 1; // 다음 페이지 번호
+    setPage(nextPage);  // 페이지 상태 업데이트
+  };
 
   return (
     <>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<Main movies={movies} />} />
-          <Route path='/details' element={<MovieDetail />} />
+          <Route
+            index
+            element={<Main movies={movies} loadMoreMovies={loadMoreMovies} loading={loading} />}
+          />
+          <Route path='/details/:id' element={<MovieDetail />} />
         </Route>
       </Routes>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

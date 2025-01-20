@@ -1,18 +1,37 @@
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
 
-const imageUrl = "https://image.tmdb.org/t/p/w500";
+const imageUrl = "https://image.tmdb.org/t/p/w200";
 
 const MovieDetail = () => {
-  const [detailData, setDetailData] = useState({});
+  const { id } = useParams();
+  const [detailData, setDetailData] = useState(null);
 
   useEffect(() => {
-    fetch('/src/assets/data/movieDetailData.json')
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        setDetailData(data)
-      })
-  }, []);
+    const fetchMovieDetail = async () => {
+      const accessToken = import.meta.env.VITE_MOVIE_ACCESS_TOKEN;
+      const url = `https://api.themoviedb.org/3/movie/${id}?language=ko-KR`;
+
+      try {
+        const response = await axios.get(url, {
+          headers: {
+            accept: 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        setDetailData(response.data); // 상세 데이터 상태 업데이트
+      } catch (error) {
+        console.error('영화 상세 정보 요청 실패:', error);
+      }
+    };
+
+    fetchMovieDetail();
+  }, [id]);
+
+  if (!detailData) {
+    return <p>로딩 중...</p>;
+  }
 
   return (
     <div className='flex justify-center space-x-4'>
