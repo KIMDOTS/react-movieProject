@@ -24,10 +24,11 @@ function App() {
     const url = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=ko-KR&page=${pageNumber}&sort_by=popularity.desc`;
 
     try {
+      // get 요청보내기
       const response = await axios.get(url, {
         headers: {
-          accept: 'application/json',
-          Authorization: `Bearer ${accessToken}`, // Authorization 헤더에 액세스 토큰 추가
+          accept: 'application/json',  // 서버로부터 어떤 형식의 데이터를 받고 싶은지를 명시하는 것
+          Authorization: `Bearer ${accessToken}`, // 인증과 관련된 정보를 서버에 전달,  액세스 토큰 추가
         }
       });
 
@@ -44,7 +45,7 @@ function App() {
     }
   };
 
-  // "더보기" 버튼 클릭 시 실행될 함수
+  // 더보기 버튼 클릭 시 실행될 함수
   const loadMoreMovies = () => {
     const nextPage = page + 1; // 다음 페이지 번호
     setPage(nextPage);  // 페이지 상태 업데이트
