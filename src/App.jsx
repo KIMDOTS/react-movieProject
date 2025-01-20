@@ -4,7 +4,7 @@ import MovieDetail from './page/MovieDetail';
 import { Route, Routes } from 'react-router-dom';
 import Layout from './components/Layout';
 import Main from './page/Main';
-import axios from 'axios';
+import axiosInstance from './api/axiosInstance';
 
 function App() {
   const [movies, setMovies] = useState([]);
@@ -20,16 +20,16 @@ function App() {
   const fetchMovies = async (pageNumber) => {
     setLoading(true); // 로딩 시작
 
-    const accessToken = import.meta.env.VITE_MOVIE_ACCESS_TOKEN;
-    const url = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=ko-KR&page=${pageNumber}&sort_by=popularity.desc`;
-
     try {
-      // get 요청보내기
-      const response = await axios.get(url, {
-        headers: {
-          accept: 'application/json',  // 서버로부터 어떤 형식의 데이터를 받고 싶은지를 명시하는 것
-          Authorization: `Bearer ${accessToken}`, // 인증과 관련된 정보를 서버에 전달,  액세스 토큰 추가
-        }
+      // axiosInstance 사용하여 get 요청 보내기
+      const response = await axiosInstance.get('/discover/movie', {
+        params: {
+          include_adult: false,
+          include_video: false,
+          language: 'ko-KR',
+          page: pageNumber,
+          sort_by: 'popularity.desc',
+        },
       });
 
       // 성인영화 필터링

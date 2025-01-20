@@ -1,23 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import axios from 'axios';
+import axiosInstance from '../api/axiosInstance';
 
 const imageUrl = "https://image.tmdb.org/t/p/w200";
 
 const MovieDetail = () => {
-  const { id } = useParams();
-  const [detailData, setDetailData] = useState(null);
+  const { id } = useParams(); // URL에서 영화 ID 가져오기
+  const [detailData, setDetailData] = useState(null); // 영화 상세 데이터를 저장할 상태
 
   useEffect(() => {
     const fetchMovieDetail = async () => {
-      const accessToken = import.meta.env.VITE_MOVIE_ACCESS_TOKEN;
-      const url = `https://api.themoviedb.org/3/movie/${id}?language=ko-KR`;
 
       try {
-        const response = await axios.get(url, {
-          headers: {
-            accept: 'application/json',
-            Authorization: `Bearer ${accessToken}`,
+        // const url = `https://api.themoviedb.org/3/movie/${id}?language=ko-KR`;
+        const response = await axiosInstance.get(`/movie/${id}`, {
+          params: {
+            language: 'ko-KR', // 언어 설정
           },
         });
         setDetailData(response.data); // 상세 데이터 상태 업데이트
