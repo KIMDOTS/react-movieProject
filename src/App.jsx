@@ -5,6 +5,7 @@ import { Route, Routes } from 'react-router-dom';
 import Layout from './components/Layout';
 import Main from './page/Main';
 import axiosInstance from './api/axiosInstance';
+import SearchResult from './page/SearchResult';
 
 function App() {
   const [movies, setMovies] = useState([]);
@@ -55,10 +56,8 @@ function App() {
     <>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route
-            index
-            element={<Main movies={movies} loadMoreMovies={loadMoreMovies} loading={loading} />}
-          />
+          <Route index element={<Main movies={movies} loadMoreMovies={loadMoreMovies} loading={loading} />} />
+          <Route path="/search" element={<SearchResult />} />
           <Route path='/details/:id' element={<MovieDetail />} />
         </Route>
       </Routes>
