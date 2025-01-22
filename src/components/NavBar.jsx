@@ -69,12 +69,6 @@ const NavBar = ({ movies }) => {
     }
   }, [debouncedQuery]);
 
-  // useEffect(() => {
-  //   if (debouncedQuery) {
-  //     navigate(`/search?query=${debouncedQuery}`);
-  //   }
-  // }, [debouncedQuery, navigate]);
-
   return (
     <nav className='flex justify-between items-center my-[10px]'>
       <Link to="/" className='text-2xl font-bold text-gray-800 px-[10px]'>MOVIE PEDIA</Link>
